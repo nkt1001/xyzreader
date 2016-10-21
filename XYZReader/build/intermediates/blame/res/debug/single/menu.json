@@ -2,5 +2,13 @@
     {
         "merged": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\res\\merged\\debug\\menu\\main.xml",
         "source": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\menu\\main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\res\\merged\\debug\\menu\\menu_material_artcle_detail.xml",
+        "source": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\menu\\menu_material_artcle_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\res\\merged\\debug\\menu\\menu_material_article_detail.xml",
+        "source": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\menu\\menu_material_article_detail.xml"
     }
 ]

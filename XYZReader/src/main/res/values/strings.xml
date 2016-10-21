@@ -8,5 +8,9 @@
     <string name="action_share">Share</string>
 
     <string name="up">Up</string>
+    <string name="title_activity_material_article_detail">MaterialArticleDetailActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_material_artcle_detail">MaterialArtcleDetailActivity</string>
+    <string name="title_activity_material_article_list">MaterialArticleListActivity</string>
 
 </resources>
