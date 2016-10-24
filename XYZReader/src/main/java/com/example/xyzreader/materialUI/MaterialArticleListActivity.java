@@ -71,7 +71,6 @@ public class MaterialArticleListActivity extends Activity implements
         startService(new Intent(this, UpdaterService.class));
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();

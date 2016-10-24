@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-land-v13\\values-sw600dp-land-v13.xml",
+        "outputFile": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-land-v13\\values-sw600dp-land-v13.xml",
         "map": [
             {
                 "to": {
@@ -11,13 +11,13 @@
                     "endOffset": 94
                 },
                 "from": {
-                    "file": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
+                    "file": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
-                        "startOffset": 38,
+                        "startOffset": 36,
                         "endColumn": 43,
-                        "endOffset": 77
+                        "endOffset": 75
                     }
                 }
             },
@@ -30,13 +30,13 @@
                     "endOffset": 149
                 },
                 "from": {
-                    "file": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
+                    "file": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 138,
+                        "startOffset": 133,
                         "endColumn": 54,
-                        "endOffset": 188
+                        "endOffset": 183
                     }
                 }
             },
@@ -49,13 +49,13 @@
                     "endOffset": 201
                 },
                 "from": {
-                    "file": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
+                    "file": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\values-sw600dp-land\\macro_layout.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
-                        "startOffset": 85,
+                        "startOffset": 81,
                         "endColumn": 51,
-                        "endOffset": 132
+                        "endOffset": 128
                     }
                 }
             }
