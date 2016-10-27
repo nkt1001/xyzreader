@@ -1,19 +1,20 @@
 package com.example.xyzreader.materialUI;
 
-import android.app.Activity;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.app.ShareCompat;
+import android.support.v4.view.OnApplyWindowInsetsListener;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.WindowInsetsCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -21,8 +22,9 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
-public class MaterialDetailActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MaterialDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String TAG = "MaterialDetailActivity";
     private Cursor mCursor;
     private long mStartId;
 
@@ -36,14 +38,14 @@ public class MaterialDetailActivity extends Activity implements LoaderManager.Lo
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        }
-        setContentView(R.layout.activity_article_detail);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//        }
 
         getLoaderManager().initLoader(0, null, this);
+
 
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -60,6 +62,7 @@ public class MaterialDetailActivity extends Activity implements LoaderManager.Lo
 
             @Override
             public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected() called with: position = [" + position + "]");
                 if (mCursor != null) {
                     mCursor.moveToPosition(position);
                 }
@@ -71,14 +74,23 @@ public class MaterialDetailActivity extends Activity implements LoaderManager.Lo
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(mPager, new OnApplyWindowInsetsListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(MaterialDetailActivity.this)
-                        .setType("text/plain")
-                        .setText("Some sample text")
-                        .getIntent(), getString(R.string.action_share)));
+            public WindowInsetsCompat onApplyWindowInsets(View v,
+                                                          WindowInsetsCompat insets) {
+                insets = ViewCompat.onApplyWindowInsets(v, insets);
+                if (insets.isConsumed()) {
+                    return insets;
+                }
+
+                boolean consumed = false;
+                for (int i = 0, count = mPager.getChildCount(); i <  count; i++) {
+                    ViewCompat.dispatchApplyWindowInsets(mPager.getChildAt(i), insets);
+                    if (insets.isConsumed()) {
+                        consumed = true;
+                    }
+                }
+                return consumed ? insets.consumeSystemWindowInsets() : insets;
             }
         });
 
@@ -98,6 +110,7 @@ public class MaterialDetailActivity extends Activity implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d(TAG, "onLoadFinished: " + mStartId);
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
 
