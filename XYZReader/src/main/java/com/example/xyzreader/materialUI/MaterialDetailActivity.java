@@ -9,20 +9,24 @@ import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.OnApplyWindowInsetsListener;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.WindowInsetsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
-public class MaterialDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MaterialDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, MaterialDetailFragment.MaterialDetailFragmentCallback {
 
     private static final String TAG = "MaterialDetailActivity";
     private Cursor mCursor;
@@ -104,6 +108,18 @@ public class MaterialDetailActivity extends AppCompatActivity implements LoaderM
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show();
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return ArticleLoader.newAllArticlesInstance(this);
     }
@@ -134,6 +150,18 @@ public class MaterialDetailActivity extends AppCompatActivity implements LoaderM
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursor = null;
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void toolbarCreated(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.navigateUpFromSameTask(MaterialDetailActivity.this);
+            }
+        });
     }
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {

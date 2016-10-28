@@ -1,9 +1,9 @@
 package com.example.xyzreader.materialUI;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -14,10 +14,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +43,9 @@ public class MaterialDetailFragment extends Fragment implements
     private CollapsingToolbarLayout mCollapsingTb;
     private FloatingActionButton fab;
     private SquareImageView mTbImage;
-    private Toolbar mTb;
-    private boolean isDetach;
+    private NestedScrollView mScrollText;
+
+    private MaterialDetailFragmentCallback mCallback;
 
 
     public MaterialDetailFragment() {}
@@ -77,10 +80,10 @@ public class MaterialDetailFragment extends Fragment implements
         mCollapsingTb = (CollapsingToolbarLayout) mRootView.findViewById(R.id.toolbar_layout);
         mTbImage = (SquareImageView) mRootView.findViewById(R.id.tb_image);
         fab = (FloatingActionButton) mRootView.findViewById(R.id.fab_share);
-        mTb = (Toolbar) mRootView.findViewById(R.id.tb_detail);
-        getActivityCast().setSupportActionBar(mTb);
-        getActivityCast().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActivity().setActionBar();
+        mScrollText = (NestedScrollView) mRootView.findViewById(R.id.scroll_text);
+
+        Toolbar tb = (Toolbar) mRootView.findViewById(R.id.tb_detail);
+        mCallback.toolbarCreated(tb);
 
         bindViews();
         return mRootView;
@@ -92,20 +95,20 @@ public class MaterialDetailFragment extends Fragment implements
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
-        isDetach = false;
+        if (activity instanceof MaterialDetailFragmentCallback) {
+            mCallback = (MaterialDetailFragmentCallback) activity;
+        } else {
+            throw new ClassCastException();
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        isDetach = true;
-    }
-
-    public MaterialDetailActivity getActivityCast() {
-        return (MaterialDetailActivity) getActivity();
+        mCallback = null;
     }
 
     private void bindViews() {
@@ -115,7 +118,7 @@ public class MaterialDetailFragment extends Fragment implements
 
         TextView titleView = (TextView) mRootView.findViewById(R.id.tv_article);
         TextView bylineView = (TextView) mRootView.findViewById(R.id.tv_byline);
-//        bylineView.setMovementMethod(new LinkMovementMethod());
+        bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.tv_text);
 
         if (mCursor != null) {
@@ -130,9 +133,9 @@ public class MaterialDetailFragment extends Fragment implements
                 }
             });
 
-            mRootView.setAlpha(0);
-            mRootView.setVisibility(View.VISIBLE);
-            mRootView.animate().alpha(1);
+            mScrollText.setAlpha(0);
+            mScrollText.setVisibility(View.VISIBLE);
+            mScrollText.animate().alpha(1);
 
             String title = mCursor.getString(ArticleLoader.Query.TITLE);
             mCollapsingTb.setTitle(title);
@@ -148,24 +151,6 @@ public class MaterialDetailFragment extends Fragment implements
                             + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)));
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)));
-
-//            titleView.setVisibility(View.VISIBLE);
-//            titleView.setAlpha(View.VISIBLE);
-//
-//            Log.d(TAG, "bindViews: " + mItemId);
-//
-//            Log.d(TAG, "bindViews: visib mRoot = " + (mRootView.getVisibility() == View.VISIBLE));
-//            Log.d(TAG, "bindViews: alpha mRoot = " + (mRootView.getAlpha()));
-//
-//            Log.d(TAG, "bindViews: visib title = " + (titleView.getVisibility() == View.VISIBLE));
-//            Log.d(TAG, "bindViews: alpha title = " + (titleView.getAlpha()));
-//
-//            Log.d(TAG, "bindViews: visib byline = " + (bylineView.getVisibility() == View.VISIBLE));
-//            Log.d(TAG, "bindViews: alpha byline = " + (bylineView.getAlpha()));
-//
-//            Log.d(TAG, "bindViews: visib body = " + (bodyView.getVisibility() == View.VISIBLE));
-//            Log.d(TAG, "bindViews: alpha body = " + (bodyView.getAlpha()));
-//            Log.d(TAG, "");
 
             Picasso.with(getActivity()).load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
                     .placeholder(R.drawable.empty_detail)
@@ -187,38 +172,17 @@ public class MaterialDetailFragment extends Fragment implements
                         }
                     });
 
-//            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
-//                    .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
-//                        @Override
-//                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-//                            final Bitmap bitmap = imageContainer.getBitmap();
-//                            if (bitmap != null) {
-//                                mTbImage.setImageBitmap(bitmap);
-//                                Palette palette = Palette.from(bitmap).maximumColorCount(12).generate();
-//                                int primaryDark = ActivityCompat.getColor(getActivity(), R.color.primary_dark);
-//                                int primary = ActivityCompat.getColor(getActivity(), R.color.primary);
-//                                mCollapsingTb.setContentScrimColor(palette.getMutedColor(primary));
-//                                mCollapsingTb.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onErrorResponse(VolleyError volleyError) {
-//
-//                        }
-//                    });
-
         } else {
-            mRootView.setVisibility(View.GONE);
-            titleView.setText("N/A");
-            bylineView.setText("N/A" );
-            bodyView.setText("N/A");
+            mScrollText.setVisibility(View.GONE);
+            titleView.setText("");
+            bylineView.setText("");
+            bodyView.setText("");
         }
     }
 
     private void applyPalette(Palette palette) {
 
-        if (isDetach || getResources() == null) return;
+        if (mCallback == null || getResources() == null) return;
 
         int primaryDark = getResources().getColor(R.color.primary_dark);
         int primary = getResources().getColor(R.color.primary);
@@ -254,5 +218,9 @@ public class MaterialDetailFragment extends Fragment implements
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
         bindViews();
+    }
+
+    interface MaterialDetailFragmentCallback {
+        void toolbarCreated(Toolbar toolbar);
     }
 }
