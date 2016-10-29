@@ -106,5 +106,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_internet">Refresh failed. No active Internet connection.</string>
+    <string name="server_fail">Refresh failed. Server error!</string>
 
 </resources>

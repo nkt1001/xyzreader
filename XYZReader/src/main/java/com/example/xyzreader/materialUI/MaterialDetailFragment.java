@@ -31,6 +31,12 @@ import com.example.xyzreader.data.ArticleLoader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+/**
+ * A fragment representing a single Article detail screen.
+ * {@link com.example.xyzreader.ui.ArticleDetailFragment} material implementation.
+ * Fragment contains fab, image of big article's image and article text.
+ * See also other implementation {@link MaterialArticleDetailFragment}.
+ */
 public class MaterialDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "MaterialDetailFragment";
@@ -46,7 +52,6 @@ public class MaterialDetailFragment extends Fragment implements
     private NestedScrollView mScrollText;
 
     private MaterialDetailFragmentCallback mCallback;
-
 
     public MaterialDetailFragment() {}
 
@@ -69,7 +74,7 @@ public class MaterialDetailFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader((int)mItemId, null, this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -87,11 +92,6 @@ public class MaterialDetailFragment extends Fragment implements
 
         bindViews();
         return mRootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

@@ -27,12 +27,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
+import com.example.xyzreader.materialUI.MaterialArticleDetailFragment;
+import com.example.xyzreader.materialUI.MaterialDetailFragment;
 
 /**
+ * @deprecated Watch material design variant!
+ * {@link MaterialDetailFragment} or {@link MaterialArticleDetailFragment}
  * A fragment representing a single Article detail screen. This fragment is
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
+@Deprecated
 public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";

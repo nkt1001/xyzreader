@@ -19,10 +19,15 @@ import android.view.WindowInsets;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
+import com.example.xyzreader.materialUI.MaterialArticleDetailActivity;
+import com.example.xyzreader.materialUI.MaterialDetailActivity;
 
 /**
+ * @deprecated Watch material design variant!
+ * {@link MaterialDetailActivity} or {@link MaterialArticleDetailActivity}
  * An activity representing a single Article detail screen, letting you swipe between articles.
  */
+@Deprecated
 public class ArticleDetailActivity extends ActionBarActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 

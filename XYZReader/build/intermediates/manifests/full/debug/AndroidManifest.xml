@@ -85,6 +85,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.xyzreader.materialUI.MaterialArticleListActivity" />
         </activity>
+        <activity
+            android:name="com.example.xyzreader.materialUI.MaterialArticleDetailActivity"
+            android:label="@string/title_activity_material_article_detail"
+            android:parentActivityName="com.example.xyzreader.materialUI.MaterialArticleListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.com.example.xyzreader.items" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.xyzreader.materialUI.MaterialArticleListActivity" />
+        </activity>
     </application>
 
 </manifest>

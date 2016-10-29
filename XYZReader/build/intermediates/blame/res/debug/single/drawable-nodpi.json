@@ -2,5 +2,9 @@
     {
         "merged": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\empty_detail.png",
         "source": "C:\\Users\\Nkt1001\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\drawable-nodpi\\empty_detail.png"
+    },
+    {
+        "merged": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\build\\intermediates\\res\\merged\\debug\\drawable-nodpi\\empty_detail.png",
+        "source": "C:\\AndroidStudioProjects\\xyzreader\\XYZReader\\src\\main\\res\\drawable-nodpi\\empty_detail.png"
     }
 ]

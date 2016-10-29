@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -25,14 +26,19 @@ import com.example.xyzreader.data.UpdaterService;
 import com.example.xyzreader.ui.DynamicHeightNetworkImageView;
 import com.example.xyzreader.ui.ImageLoaderHelper;
 
+/**
+ * An activity representing a list of Articles. This activity has different presentations for
+ * handset and tablet-size devices. On handsets, the activity presents a list of items, which when
+ * touched, lead to a {@link MaterialDetailActivity} or {@link MaterialArticleDetailActivity} representing item details.
+ * {@link com.example.xyzreader.ui.ArticleListActivity} material implementation
+ */
 public class MaterialArticleListActivity extends Activity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = MaterialArticleListActivity.class.getSimpleName();
-//    private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFab;
+//    private boolean isFirstRun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,7 @@ public class MaterialArticleListActivity extends Activity implements
         setContentView(R.layout.activity_material_article_list);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_material);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -54,9 +61,6 @@ public class MaterialArticleListActivity extends Activity implements
         if (savedInstanceState == null) {
             refresh();
         }
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.tlBar_list);
-//        setActionBar(toolbar);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +91,27 @@ public class MaterialArticleListActivity extends Activity implements
     private boolean mIsRefreshing = false;
 
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
+
+        private boolean isFirstRun = true;
+
         @Override
         public void onReceive(Context context, Intent intent) {
             if (UpdaterService.BROADCAST_ACTION_STATE_CHANGE.equals(intent.getAction())) {
-                mIsRefreshing = intent.getBooleanExtra(UpdaterService.EXTRA_REFRESHING, false);
-                updateRefreshingUI();
+                if (isFirstRun) {
+                    isFirstRun = false;
+                } else {
+                    int result = intent.getIntExtra(UpdaterService.EXTRA_REFRESHING, -100);
+
+                    mIsRefreshing = (result == UpdaterService.UpdateResult.RESULT_REFRESHING);
+                    updateRefreshingUI();
+
+                    if (result == UpdaterService.UpdateResult.RESULT_FAILED_SERVER)
+                        Snackbar.make(mFab, R.string.server_fail, Snackbar.LENGTH_SHORT).show();
+                    else if (result == UpdaterService.UpdateResult.RESULT_FAILED_INTERNET)
+                        Snackbar.make(mFab, R.string.no_internet, Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                isFirstRun = true;
             }
         }
     };
@@ -111,8 +131,7 @@ public class MaterialArticleListActivity extends Activity implements
         adapter.setHasStableIds(true);
         mRecyclerView.setAdapter(adapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL));
     }
 
     @Override

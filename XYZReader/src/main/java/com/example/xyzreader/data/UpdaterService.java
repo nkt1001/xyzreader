@@ -20,6 +20,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.xyzreader.data.UpdaterService.UpdateResult.RESULT_FAILED_INTERNET;
+import static com.example.xyzreader.data.UpdaterService.UpdateResult.RESULT_FAILED_SERVER;
+import static com.example.xyzreader.data.UpdaterService.UpdateResult.RESULT_OK;
+import static com.example.xyzreader.data.UpdaterService.UpdateResult.RESULT_REFRESHING;
+
 public class UpdaterService extends IntentService {
     private static final String TAG = "UpdaterService";
 
@@ -27,6 +32,13 @@ public class UpdaterService extends IntentService {
             = "com.example.xyzreader.intent.action.STATE_CHANGE";
     public static final String EXTRA_REFRESHING
             = "com.example.xyzreader.intent.extra.REFRESHING";
+
+    public interface UpdateResult {
+        int RESULT_OK = 200;
+        int RESULT_REFRESHING = 0;
+        int RESULT_FAILED_SERVER = 500;
+        int RESULT_FAILED_INTERNET = 400;
+    }
 
     public UpdaterService() {
         super(TAG);
@@ -40,11 +52,13 @@ public class UpdaterService extends IntentService {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni == null || !ni.isConnected()) {
             Log.w(TAG, "Not online, not refreshing.");
+            sendStickyBroadcast(
+                    new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, RESULT_FAILED_INTERNET));
             return;
         }
 
         sendStickyBroadcast(
-                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, true));
+                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, RESULT_REFRESHING));
 
         // Don't even inspect the intent, we only do one thing, and that's fetch content.
         ArrayList<ContentProviderOperation> cpo = new ArrayList<ContentProviderOperation>();
@@ -53,6 +67,8 @@ public class UpdaterService extends IntentService {
 
         // Delete all items
         cpo.add(ContentProviderOperation.newDelete(dirUri).build());
+
+        int result = RESULT_OK;
 
         try {
             JSONArray array = RemoteEndpointUtil.fetchJsonArray();
@@ -79,9 +95,10 @@ public class UpdaterService extends IntentService {
 
         } catch (JSONException | RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Error updating content.", e);
+            result = RESULT_FAILED_SERVER;
         }
 
         sendStickyBroadcast(
-                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, false));
+                new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, result));
     }
 }

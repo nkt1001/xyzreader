@@ -26,7 +26,15 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 
-public class MaterialDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, MaterialDetailFragment.MaterialDetailFragmentCallback {
+/**
+ * An activity representing a single Article detail screen, letting you swipe between articles.
+ * {@link com.example.xyzreader.ui.ArticleDetailActivity} material implementation.
+ * Current Activity is fragment container therefore layout file contains only viewpager.
+ * All material features represented in {@link MaterialDetailFragment}.
+ * See also other implementation: {@link MaterialArticleDetailActivity}.
+ */
+public class MaterialDetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        MaterialDetailFragment.MaterialDetailFragmentCallback {
 
     private static final String TAG = "MaterialDetailActivity";
     private Cursor mCursor;
@@ -39,17 +47,8 @@ public class MaterialDetailActivity extends AppCompatActivity implements LoaderM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_detail);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().getDecorView().setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-//        }
 
         getLoaderManager().initLoader(0, null, this);
-
 
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -97,8 +96,6 @@ public class MaterialDetailActivity extends AppCompatActivity implements LoaderM
                 return consumed ? insets.consumeSystemWindowInsets() : insets;
             }
         });
-
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
