@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:elevation="4dp">
+        app:elevation="4dp"
+        android:elevation="4dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -104,6 +105,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:elevation="6dp"
+        android:elevation="6dp"
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/ic_share" />
 
