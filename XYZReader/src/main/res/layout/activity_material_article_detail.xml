@@ -55,7 +55,7 @@
         app:layout_anchorGravity="bottom|end"
         android:elevation="6dp"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
+        app:pressedTranslationZ="6dp"
         app:srcCompat="@drawable/ic_share" />
 
 </android.support.design.widget.CoordinatorLayout>
